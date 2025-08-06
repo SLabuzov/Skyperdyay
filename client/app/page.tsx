@@ -2,15 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 import {Wallet} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 z-1 w-full">
-        <div className="container h-18 mx-auto flex items-center">
+        <div className="container h-18 mx-auto flex items-center justify-between">
           <Link href="/">
             <Wallet className="h-9 w-9"/>
           </Link>
+          <SignedOut>
+            <Button asChild>
+              <SignInButton>Войдите в свой аккаунт</SignInButton>
+            </Button>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       </header>
       <main className="flex flex-1">
@@ -32,9 +41,11 @@ export default function Home() {
                   Отмечайте важные вехи, будьте ответственны и воплощайте общие мечты в
                   реальность.
                 </p>
-                <Button asChild size="xl" className="text-lg">
-                  <Link href="/">Войдите в свой аккаунт</Link>
-                </Button>
+                <SignedOut>
+                  <Button asChild size="xl" className="text-lg">
+                    <SignInButton>Войдите в свой аккаунт</SignInButton>
+                  </Button>
+                </SignedOut>
               </div>
               <Image src="/investments.svg" alt="investments" width={ 640 } height={ 640 }/>
             </div>
