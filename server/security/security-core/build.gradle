@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':security:security-api')
+
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    annotationProcessor 'org.projectlombok:lombok'
+}
