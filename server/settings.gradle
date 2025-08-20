@@ -3,3 +3,5 @@ rootProject.name = 'server'
 include 'app'
 include 'security:security-api'
 include 'security:security-core'
+include 'engine:engine-core'
+
