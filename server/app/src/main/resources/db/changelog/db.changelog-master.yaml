@@ -1,2 +1,10 @@
 databaseChangeLog:
-  - 
+  - include:
+      file: migrations/01-init-schema.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/02-init-currencies.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/03-init-wallets.sql
+      relativeToChangelogFile: true
