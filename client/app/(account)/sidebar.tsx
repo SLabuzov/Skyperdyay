@@ -3,13 +3,14 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, WalletCards } from "lucide-react";
+import { Banknote, LayoutDashboard, WalletCards } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/logo";
 
 const navigation = [
   { name: "Общая аналитика", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Кошельки", href: "/wallets", icon: WalletCards }
+  { name: "Кошельки", href: "/wallets", icon: WalletCards },
+  { name: "Финансовые категории", href: "/categories", icon: Banknote },
 ];
 
 export default function Sidebar() {

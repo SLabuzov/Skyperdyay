@@ -28,7 +28,7 @@ public class CategoryFacade implements CategoryEdgeService {
     @Override
     public void defineCategory(DefineCategoryRequest request) {
         String owner = currentUserApiService.currentUserAccount().userId();
-        CategoryType categoryType = CategoryType.valueOf(request.name());
+        CategoryType categoryType = CategoryType.valueOf(request.type());
 
         Category category = new Category();
         category.setOwner(owner);

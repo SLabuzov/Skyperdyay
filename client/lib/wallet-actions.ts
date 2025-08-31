@@ -14,14 +14,14 @@ const CreateWalletFormSchema = z.object({
 
 export type State = {
   errors?: {
-    walletName: {
-      errors?: string[];
+    walletName?: {
+      errors?: string[] | null;
     },
-    currencyCode: {
-      errors?: string[];
+    currencyCode?: {
+      errors?: string[] | null;
     },
-    balance: {
-      errors?: string[];
+    balance?: {
+      errors?: string[] | null;
     }
   };
   message?: string | null;
@@ -35,17 +35,13 @@ export async function createWallet(prevState: State, formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    const {
-      walletName: walletNameErr,
-      currencyCode: currencyCodeErr,
-      balance: balanceErr
-    } = z.treeifyError(validatedFields.error).properties;
+    const properties = z.treeifyError(validatedFields.error).properties;
 
     return {
       errors: {
-        walletName: walletNameErr,
-        currencyCode: currencyCodeErr,
-        balance: balanceErr
+        walletName: properties?.walletName,
+        currencyCode: properties?.currencyCode,
+        balance: properties?.balance
       },
       message: 'Атрибуты формы заполнены некорректно'
     } satisfies State;
