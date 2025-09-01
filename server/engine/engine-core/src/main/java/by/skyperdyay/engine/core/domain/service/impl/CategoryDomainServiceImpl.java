@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryDomainDomainService implements CategoryDomainService {
+public class CategoryDomainServiceImpl implements CategoryDomainService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryDomainDomainService(CategoryRepository categoryRepository) {
+    public CategoryDomainServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
