@@ -4,7 +4,9 @@ import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Wallet;
 import by.skyperdyay.engine.core.domain.repository.WalletRepository;
 import by.skyperdyay.engine.core.domain.service.WalletDomainService;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,5 +33,27 @@ public class WalletDomainServiceImpl implements WalletDomainService {
     @Override
     public List<Wallet> fetchAllUserWallets(String owner) {
         return walletRepository.findAllByOwner(owner);
+    }
+
+    @Override
+    public Wallet fetchUserWallet(UUID id, String owner) {
+        return walletRepository.findByIdAndOwner(id, owner)
+                .orElseThrow();
+    }
+
+    @Override
+    public void topUpWallet(Wallet wallet, BigDecimal amount) {
+        BigDecimal updatedBalance = wallet.getBalance().add(amount);
+        wallet.setBalance(updatedBalance);
+
+        walletRepository.save(wallet);
+    }
+
+    @Override
+    public void withdraw(Wallet wallet, BigDecimal amount) {
+        BigDecimal updatedBalance = wallet.getBalance().subtract(amount);
+        wallet.setBalance(updatedBalance);
+
+        walletRepository.save(wallet);
     }
 }
