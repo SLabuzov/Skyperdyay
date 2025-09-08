@@ -3,12 +3,13 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Banknote, LayoutDashboard, WalletCards } from "lucide-react";
+import {Banknote, HandCoins, LayoutDashboard, WalletCards} from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/logo";
 
 const navigation = [
   { name: "Общая аналитика", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Платежи", href: "/transactions", icon: HandCoins },
   { name: "Кошельки", href: "/wallets", icon: WalletCards },
   { name: "Финансовые категории", href: "/categories", icon: Banknote },
 ];
