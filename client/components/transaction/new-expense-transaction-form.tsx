@@ -42,26 +42,26 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
       <div className="flex gap-4">
 
         {/* Кошелек для списания */ }
-        <div className="flex-1 space-y-2">
+        <div className="w-sm space-y-2">
           <Label htmlFor="wallet" className="flex">
             Кошелек
             <Asterisk size={ 12 } className="text-red-600"/>
           </Label>
           <Select name="wallet" required value={ currentWallet } onValueChange={ setCurrentWallet }>
-            <SelectTrigger id="wallet" className="w-full h-[80px]">
+            <SelectTrigger id="wallet" className="w-full">
               <SelectValue placeholder="Выбирите кошелек"/>
             </SelectTrigger>
             <SelectContent>
               { wallets.map((wallet) => (
                 <SelectItem key={ wallet.walletId } value={ wallet.walletId }>
-                  <div className="flex w-14 h-14 bg-primary-weak rounded-full items-center justify-center">
-                    <p className="text-2xl leading-none font-bold text-primary">{ wallet.walletCurrency.symbol }</p>
+                  <div className="flex w-10 h-10 bg-primary-weak rounded-full items-center justify-center">
+                    <p className="text-lg leading-none text-primary">{ wallet.walletCurrency.symbol }</p>
                   </div>
                   <div className="flex flex-col justify-between m-1">
-                    <p className="text-sm font-medium text-weak">{ wallet.walletName }</p>
+                    <p className="text-xs font-medium text-weak">{ wallet.walletName }</p>
                     <div className="flex gap-0.5 items-baseline font-bold text-strong">
-                      <p className="text-2xl">{ new Intl.NumberFormat("ru-RU").format(wallet.walletBalance) }</p>
-                      <p className="text-sm">{ wallet.walletCurrency.code }</p>
+                      <p className="text-md">{ new Intl.NumberFormat("ru-RU").format(wallet.walletBalance) }</p>
+                      <p className="text-xs">{ wallet.walletCurrency.code }</p>
                     </div>
                   </div>
                 </SelectItem>
@@ -74,26 +74,26 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
         </div>
 
         {/* Категория списания */ }
-        <div className="flex-1 space-y-2">
+        <div className="w-sm space-y-2">
           <Label htmlFor="category" className="flex">
             Категория
             <Asterisk size={ 12 } className="text-red-600"/>
           </Label>
           <Select name="category" required value={ currentCategory } onValueChange={ setCurrentCategory }>
-            <SelectTrigger id="category" className="w-full h-[80px]">
+            <SelectTrigger id="category" className="w-full">
               <SelectValue placeholder="Выбирите категорию"/>
             </SelectTrigger>
             <SelectContent>
               { expenseCategories.map((category) => (
                 <SelectItem key={ category.categoryId } value={ category.categoryId }>
                   <div
-                    className="flex w-14 h-14 bg-primary-weak [&_svg:not([class*='text-'])]:text-primary rounded-full items-center justify-center">
-                    <CategoryIcon name={ category.categoryIcon } size={ 26 }/>
+                    className="flex w-10 h-10 bg-primary-weak [&_svg:not([class*='text-'])]:text-primary rounded-full items-center justify-center">
+                    <CategoryIcon name={ category.categoryIcon } size={ 20 }/>
                   </div>
                   <div className="flex flex-col justify-between m-1">
-                    <p className="flex text-sm font-medium text-weak">Доходная категория</p>
+                    <p className="flex text-xs font-medium text-weak">Доходная категория</p>
                     <div className="flex gap-0.5 items-baseline font-bold text-strong">
-                      <p className="text-2xl">{ category.categoryName }</p>
+                      <p className="text-ms">{ category.categoryName }</p>
                     </div>
                   </div>
                 </SelectItem>
@@ -103,12 +103,11 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
         </div>
       </div>
 
-      <Separator/>
-
       <div className="flex flex-col w-sm gap-4">
+
         {/* Дата совершения операции */ }
         <div className="space-y-2">
-          <Label htmlFor="startDate" className="flex">
+          <Label htmlFor="transactionDate" className="flex">
             Дата совершения операции
             <Asterisk size={ 12 } className="text-red-600"/>
           </Label>
@@ -117,7 +116,7 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
               <Button
                 variant={ "outline" }
                 className={ cn("w-full justify-start text-left font-normal", !transactionDate && "text-muted-foreground") }
-                id="startDate"
+                id="transactionDate"
                 type="button"
               >
                 <CalendarIcon className="mr-2 h-4 w-4"/>
@@ -129,8 +128,8 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
                         required={ true }/>
             </PopoverContent>
           </Popover>
-          {/* Hidden input to store the formatted date value */ }
-          <input type="hidden" name="startDate" value={ transactionDate ? format(transactionDate, "yyyy-MM-dd") : "" }/>
+          {/* Скрытое поле ввода для хранения отформатированного значения даты */ }
+          <input type="hidden" name="transactionDate" value={ transactionDate ? format(transactionDate, "yyyy-MM-dd") : "" }/>
         </div>
 
         <div className="space-y-2">

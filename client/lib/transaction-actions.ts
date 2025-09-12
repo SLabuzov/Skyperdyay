@@ -33,6 +33,13 @@ export type State = {
 }
 
 export async function createExpenseTransaction(prevState: State, formData: FormData) {
+
+  console.log('wallet', formData.get('wallet'));
+  console.log('category', formData.get('category'));
+  console.log('transactionDate', formData.get('transactionDate'));
+  console.log('amount', formData.get('amount'));
+  console.log('notes', formData.get('notes'));
+
   const validatedFields = CreateExpenseTransactionFormSchema.safeParse({
     walletId: formData.get('wallet'),
     expenseCategoryId: formData.get('category'),
