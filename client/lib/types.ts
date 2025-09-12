@@ -34,3 +34,7 @@ export interface CategoryInfo {
   categoryType: CategoryType
   categoryIcon: IconName
 }
+
+export interface CreateExpenseTransactionDto {
+
+}
