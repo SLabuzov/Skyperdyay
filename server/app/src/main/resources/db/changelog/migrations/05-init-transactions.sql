@@ -9,6 +9,7 @@ CREATE TABLE moneybox.transactions
     wallet_id        UUID        NOT NULL,
     category_id      UUID        NOT NULL,
     transaction_date DATE        NOT NULL,
+    notes            VARCHAR(128),
     created_at       TIMESTAMP   NOT NULL,
     modified_at      TIMESTAMP
 );

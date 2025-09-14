@@ -1,34 +1,34 @@
 "use client";
 
-import { CategoryInfo, WalletInfo } from '@/lib/types';
+import React, { useActionState, useState } from 'react';
+import Link from 'next/link';
+import { Asterisk, CalendarIcon, ChevronsRight, OctagonX } from 'lucide-react';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import React, { useActionState, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { Asterisk, CalendarIcon, ChevronsRight, OctagonX } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CategoryIcon } from '@/components/category/category-icon';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
-import { createExpenseTransaction, State } from '@/lib/transaction-actions';
+import { cn } from '@/lib/utils';
+import { CategoryInfo, WalletInfo } from '@/lib/types';
+import { createIncomeTransaction, State } from '@/lib/transaction-actions';
 
 interface FormProps {
   wallets: WalletInfo[]
-  expenseCategories: CategoryInfo[]
+  incomeCategories: CategoryInfo[]
 }
 
-export default function NewExpenseTransactionForm({ wallets, expenseCategories }: FormProps) {
+export default function NewIncomeTransactionForm({ wallets, incomeCategories }: FormProps) {
 
   const [transactionDate, setTransactionDate] = useState<Date>(new Date());
   const [currentWallet, setCurrentWallet] = useState<string>(wallets[0].walletId);
-  const [currentCategory, setCurrentCategory] = useState<string>(expenseCategories[0].categoryId);
+  const [currentCategory, setCurrentCategory] = useState<string>(incomeCategories[0].categoryId);
 
   const initialState: State = { message: null };
-  const [state, formAction] = useActionState(createExpenseTransaction, initialState);
+  const [state, formAction] = useActionState(createIncomeTransaction, initialState);
 
 
   return (
@@ -46,7 +46,39 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
       }
       <div className="flex gap-4">
 
-        {/* Кошелек для списания */ }
+        {/* Категория зачисления доходов */ }
+        <div className="w-sm space-y-2">
+          <Label htmlFor="category" className="flex">
+            Категория
+            <Asterisk size={ 12 } className="text-red-600"/>
+          </Label>
+          <Select name="category" required value={ currentCategory } onValueChange={ setCurrentCategory }>
+            <SelectTrigger id="category" className="w-full">
+              <SelectValue placeholder="Выбирите категорию"/>
+            </SelectTrigger>
+            <SelectContent>
+              { incomeCategories.map((category) => (
+                <SelectItem key={ category.categoryId } value={ category.categoryId }>
+                  <div
+                    className="flex w-10 h-10 bg-primary-weak [&_svg:not([class*='text-'])]:text-primary rounded-full items-center justify-center">
+                    <CategoryIcon name={ category.categoryIcon } size={ 20 }/>
+                  </div>
+                  <div className="flex flex-col justify-between m-1">
+                    <p className="flex text-xs font-medium text-weak">Доходная категория</p>
+                    <div className="flex gap-0.5 items-baseline font-bold text-strong">
+                      <p className="text-ms">{ category.categoryName }</p>
+                    </div>
+                  </div>
+                </SelectItem>
+              )) }
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center text-icon-success">
+          <ChevronsRight size={ 36 }/>
+        </div>
+
+        {/* Кошелек для зачисления доходов */ }
         <div className="w-sm space-y-2">
           <Label htmlFor="wallet" className="flex">
             Кошелек
@@ -67,38 +99,6 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
                     <div className="flex gap-0.5 items-baseline font-bold text-strong">
                       <p className="text-md">{ new Intl.NumberFormat("ru-RU").format(wallet.walletBalance) }</p>
                       <p className="text-xs">{ wallet.walletCurrency.code }</p>
-                    </div>
-                  </div>
-                </SelectItem>
-              )) }
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center text-icon-error">
-          <ChevronsRight size={ 36 }/>
-        </div>
-
-        {/* Категория списания */ }
-        <div className="w-sm space-y-2">
-          <Label htmlFor="category" className="flex">
-            Категория
-            <Asterisk size={ 12 } className="text-red-600"/>
-          </Label>
-          <Select name="category" required value={ currentCategory } onValueChange={ setCurrentCategory }>
-            <SelectTrigger id="category" className="w-full">
-              <SelectValue placeholder="Выбирите категорию"/>
-            </SelectTrigger>
-            <SelectContent>
-              { expenseCategories.map((category) => (
-                <SelectItem key={ category.categoryId } value={ category.categoryId }>
-                  <div
-                    className="flex w-10 h-10 bg-primary-weak [&_svg:not([class*='text-'])]:text-primary rounded-full items-center justify-center">
-                    <CategoryIcon name={ category.categoryIcon } size={ 20 }/>
-                  </div>
-                  <div className="flex flex-col justify-between m-1">
-                    <p className="flex text-xs font-medium text-weak">Расходная категория</p>
-                    <div className="flex gap-0.5 items-baseline font-bold text-strong">
-                      <p className="text-ms">{ category.categoryName }</p>
                     </div>
                   </div>
                 </SelectItem>
@@ -138,14 +138,16 @@ export default function NewExpenseTransactionForm({ wallets, expenseCategories }
         </div>
 
         <div className="space-y-2">
+          {/* Сумма к зачислению */ }
           <Label htmlFor="amount" className="flex">
-            Сумма к списанию
+            Сумма к зачислению
             <Asterisk size={ 12 } className="text-red-600"/>
           </Label>
-          <Input id="amount" name="amount" required type="number" min="1" step="1" defaultValue="100"/>
+          <Input id="amount" name="amount" required type="number" min="1" step="0.01" defaultValue="100"/>
         </div>
 
         <div className="space-y-2">
+          {/* Заметки */ }
           <Label htmlFor="notes" className="flex">
             Заметки
           </Label>

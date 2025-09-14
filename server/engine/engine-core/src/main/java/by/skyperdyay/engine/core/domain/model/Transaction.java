@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,9 @@ public class Transaction {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private Date transactionDate;
+    private LocalDate transactionDate;
+
+    private String notes;
 
     @CreatedDate
     private Instant createdAt;

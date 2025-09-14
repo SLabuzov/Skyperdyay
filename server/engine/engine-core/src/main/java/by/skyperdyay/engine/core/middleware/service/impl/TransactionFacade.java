@@ -39,9 +39,11 @@ public class TransactionFacade implements TransactionEdgeService {
         Category category = categoryDomainService.fetchIncomeUserCategory(request.incomeCategoryId(), owner);
 
         Transaction transaction = new Transaction();
+        transaction.setOwner(owner);
         transaction.setWallet(wallet);
         transaction.setCategory(category);
         transaction.setAmount(request.amount());
+        transaction.setNotes(request.notes());
         transaction.setTransactionDate(request.transactionDate());
         transactionDomainService.recordTransaction(transaction);
 
@@ -60,9 +62,11 @@ public class TransactionFacade implements TransactionEdgeService {
         }
 
         Transaction transaction = new Transaction();
+        transaction.setOwner(owner);
         transaction.setWallet(wallet);
         transaction.setCategory(category);
         transaction.setAmount(request.amount());
+        transaction.setNotes(request.notes());
         transaction.setTransactionDate(request.transactionDate());
         transactionDomainService.recordTransaction(transaction);
 

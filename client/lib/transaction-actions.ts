@@ -3,43 +3,31 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { CreateExpenseTransactionDto } from "@/lib/types";
+import { CreateExpenseTransactionDto, CreateIncomeTransactionDto } from "@/lib/types";
 import { transactionApiService } from '@/services/transaction-api-service';
+import { UUID } from 'crypto';
 
 const CreateExpenseTransactionFormSchema = z.object({
-  walletId: z.string(),
-  expenseCategoryId: z.string(),
+  walletId: z.uuid(),
+  expenseCategoryId: z.uuid(),
+  transactionDate: z.string().min(1, "Start date is required"),
+  notes: z.string().nullish(),
+  amount: z.coerce.number()
+});
+
+const CreateIncomeTransactionFormSchema = z.object({
+  walletId: z.uuid(),
+  incomeCategoryId: z.uuid(),
   transactionDate: z.string().min(1, "Start date is required"),
   notes: z.string().nullish(),
   amount: z.coerce.number()
 });
 
 export type State = {
-  errors?: {
-    wallet?: {
-      errors?: string[] | null;
-    },
-    category?: {
-      errors?: string[] | null;
-    },
-    amount?: {
-      errors?: string[] | null;
-    },
-    notes?: {
-      errors?: string[] | null;
-    }
-  };
   message?: string | null;
 }
 
 export async function createExpenseTransaction(prevState: State, formData: FormData) {
-
-  console.log('wallet', formData.get('wallet'));
-  console.log('category', formData.get('category'));
-  console.log('transactionDate', formData.get('transactionDate'));
-  console.log('amount', formData.get('amount'));
-  console.log('notes', formData.get('notes'));
-
   const validatedFields = CreateExpenseTransactionFormSchema.safeParse({
     walletId: formData.get('wallet'),
     expenseCategoryId: formData.get('category'),
@@ -48,29 +36,68 @@ export async function createExpenseTransaction(prevState: State, formData: FormD
     notes: formData.get('notes')
   });
 
-  console.log('validatedFields', validatedFields);
-
   if (!validatedFields.success) {
-    const properties = z.treeifyError(validatedFields.error).properties;
-
     return {
-      errors: {
-        wallet: properties?.walletId,
-        category: properties?.expenseCategoryId,
-        amount: properties?.amount,
-        notes: properties?.notes
-      },
       message: 'Атрибуты формы заполнены некорректно'
     } satisfies State;
   }
 
-  const newExpenseTransaction: CreateExpenseTransactionDto = validatedFields.data satisfies CreateExpenseTransactionDto;
+  const { walletId, expenseCategoryId, amount, transactionDate, notes } = validatedFields.data;
+
+  const newExpenseTransaction: CreateExpenseTransactionDto = {
+    walletId: walletId as UUID,
+    expenseCategoryId: expenseCategoryId as UUID,
+    amount: amount,
+    transactionDate: transactionDate,
+    notes: notes
+  } satisfies CreateExpenseTransactionDto;
+
+  console.log('newExpenseTransaction', newExpenseTransaction);
 
   try {
     await transactionApiService.withdraw(newExpenseTransaction);
   } catch (error) {
     return {
-      message: 'Произошла ошибка: Кошелек не был создан'
+      message: 'Расходная операция не была добавлена'
+    } satisfies State;
+  }
+
+  revalidatePath("/transactions");
+  redirect("/transactions");
+}
+
+
+export async function createIncomeTransaction(prevState: State, formData: FormData) {
+  const validatedFields = CreateIncomeTransactionFormSchema.safeParse({
+    walletId: formData.get('wallet'),
+    incomeCategoryId: formData.get('category'),
+    transactionDate: formData.get('transactionDate'),
+    amount: formData.get('amount'),
+    notes: formData.get('notes')
+  });
+
+  if (!validatedFields.success) {
+    return {
+      message: 'Атрибуты формы заполнены некорректно'
+    } satisfies State;
+  }
+
+  const { walletId, incomeCategoryId, amount, transactionDate, notes } = validatedFields.data;
+
+  const newIncomeTransaction: CreateIncomeTransactionDto = {
+    walletId: walletId as UUID,
+    incomeCategoryId: incomeCategoryId as UUID,
+    amount: amount,
+    transactionDate: transactionDate,
+    notes: notes
+  } satisfies CreateIncomeTransactionDto;
+
+
+  try {
+    await transactionApiService.topUp(newIncomeTransaction);
+  } catch (error) {
+    return {
+      message: 'Доходная операция не была добавлена'
     } satisfies State;
   }
 
