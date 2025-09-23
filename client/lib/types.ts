@@ -1,5 +1,5 @@
-import { UUID } from "crypto";
-import { IconName } from '@/lib/icon-map';
+import {UUID} from "crypto";
+import {IconName} from '@/lib/icon-map';
 
 export interface Currency {
   code: string
@@ -49,4 +49,13 @@ export interface CreateIncomeTransactionDto {
   amount: number
   transactionDate: string
   notes: string | null | undefined
+}
+
+export interface TransactionInfo {
+  transactionId: UUID
+  amount: number
+  transactionDate: string
+  notes: string | null | undefined
+  wallet: WalletInfo
+  category: CategoryInfo
 }

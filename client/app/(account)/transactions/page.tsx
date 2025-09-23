@@ -1,13 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
+import {transactionApiService} from '@/services/transaction-api-service';
 
 
 export default async function TransactionsPage() {
 
+  const history = await transactionApiService.history('2025-07-01', '2025-07-31');
+
   return (
     <div className="flex flex-col flex-1 gap-4 px-8">
       <div className="flex items-center justify-between h-10">
-        <h1 className="text-base font-bold text-gray-600">Детальная информация по платежам</h1>
+        <h1 className="text-base font-bold text-gray-600">Детальная информация по платежам {history.length}</h1>
       </div>
       <div>
         <div className="flex items-center justify-between gap-2">

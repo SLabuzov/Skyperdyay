@@ -1,5 +1,5 @@
-import { CreateExpenseTransactionDto, CreateIncomeTransactionDto } from '@/lib/types';
-import { apiClient } from '@/services/api-client';
+import {CreateExpenseTransactionDto, CreateIncomeTransactionDto, TransactionInfo} from '@/lib/types';
+import {apiClient} from '@/services/api-client';
 
 class TransactionApiService {
   private readonly baseUrl: string = process.env.BACKEND_APP_API_ENDPOINT! + '/transactions';
@@ -10,6 +10,16 @@ class TransactionApiService {
 
   async topUp(newIncomeTransaction: CreateIncomeTransactionDto): Promise<void> {
     return apiClient.post<CreateIncomeTransactionDto>(this.baseUrl + '/income', newIncomeTransaction);
+  }
+
+  async history(startDate: string, endDate: string): Promise<TransactionInfo[]> {
+    const url = new URL(this.baseUrl + '/history');
+    url.searchParams.append('startDate', String(startDate));
+    url.searchParams.append('endDate', String(endDate));
+
+    console.log('url', url.toString());
+
+    return apiClient.get<TransactionInfo[]>(url.toString());
   }
 }
 
