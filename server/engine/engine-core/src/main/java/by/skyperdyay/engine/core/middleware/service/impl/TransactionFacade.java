@@ -1,6 +1,7 @@
 package by.skyperdyay.engine.core.middleware.service.impl;
 
 import by.skyperdyay.engine.core.domain.model.Category;
+import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Transaction;
 import by.skyperdyay.engine.core.domain.model.Wallet;
 import by.skyperdyay.engine.core.domain.service.CategoryDomainService;
@@ -8,9 +9,15 @@ import by.skyperdyay.engine.core.domain.service.TransactionDomainService;
 import by.skyperdyay.engine.core.domain.service.WalletDomainService;
 import by.skyperdyay.engine.core.middleware.model.request.ExpenseTransactionRequest;
 import by.skyperdyay.engine.core.middleware.model.request.IncomeTransactionRequest;
+import by.skyperdyay.engine.core.middleware.model.request.PeriodRequest;
+import by.skyperdyay.engine.core.middleware.model.response.CategoryResponse;
+import by.skyperdyay.engine.core.middleware.model.response.CurrencyResponse;
+import by.skyperdyay.engine.core.middleware.model.response.TransactionInfoResponse;
+import by.skyperdyay.engine.core.middleware.model.response.WalletInfoResponse;
 import by.skyperdyay.engine.core.middleware.service.TransactionEdgeService;
 import by.skyperdyay.security.api.CurrentUserApiService;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -71,5 +78,39 @@ public class TransactionFacade implements TransactionEdgeService {
         transactionDomainService.recordTransaction(transaction);
 
         walletDomainService.withdraw(wallet, request.amount());
+    }
+
+    @Override
+    public List<TransactionInfoResponse> extractOperationsByPeriod(PeriodRequest request) {
+        String owner = currentUserApiService.currentUserAccount().userId();
+
+        List<Transaction> transactions = transactionDomainService
+                .extractOwnerTransactionsByPeriod(owner, request.startPeriod(), request.endPeriod());
+
+        return transactions.stream().map(transaction -> {
+                    Wallet wallet = transaction.getWallet();
+                    Currency currency = wallet.getCurrency();
+                    Category category = transaction.getCategory();
+
+                    CurrencyResponse currencyResponse = new CurrencyResponse(
+                            currency.getCode(), currency.getName(), currency.getSymbol()
+                    );
+                    WalletInfoResponse walletInfoResponse = new WalletInfoResponse(
+                            wallet.getId(), wallet.getName(), wallet.getBalance(), currencyResponse
+                    );
+                    CategoryResponse categoryResponse = new CategoryResponse(
+                            category.getId(), category.getName(), category.getIcon(), category.getType().name()
+                    );
+
+                    return new TransactionInfoResponse(
+                            transaction.getId(),
+                            transaction.getAmount(),
+                            transaction.getTransactionDate(),
+                            transaction.getNotes(),
+                            walletInfoResponse,
+                            categoryResponse
+                    );
+                })
+                .toList();
     }
 }
