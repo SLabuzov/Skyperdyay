@@ -3,14 +3,14 @@ package by.skyperdyay.engine.core.middleware.service.impl;
 import by.skyperdyay.engine.core.domain.model.Category;
 import by.skyperdyay.engine.core.domain.model.CategoryType;
 import by.skyperdyay.engine.core.domain.service.CategoryDomainService;
+import by.skyperdyay.engine.core.middleware.mapper.CategoryMapper;
 import by.skyperdyay.engine.core.middleware.model.request.DefineCategoryRequest;
 import by.skyperdyay.engine.core.middleware.model.response.CategoryResponse;
 import by.skyperdyay.engine.core.middleware.service.CategoryEdgeService;
 import by.skyperdyay.security.api.CurrentUserApiService;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
@@ -18,11 +18,14 @@ public class CategoryFacade implements CategoryEdgeService {
 
     private final CurrentUserApiService currentUserApiService;
     private final CategoryDomainService categoryDomainService;
+    private final CategoryMapper categoryMapper;
 
     public CategoryFacade(CurrentUserApiService currentUserApiService,
-                          CategoryDomainService categoryDomainService) {
+                          CategoryDomainService categoryDomainService,
+                          CategoryMapper categoryMapper) {
         this.currentUserApiService = currentUserApiService;
         this.categoryDomainService = categoryDomainService;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -45,12 +48,7 @@ public class CategoryFacade implements CategoryEdgeService {
 
         return categoryDomainService.fetchAllUserCategories(owner)
                 .stream()
-                .map(category -> new CategoryResponse(
-                        category.getId(),
-                        category.getName(),
-                        category.getType().name(),
-                        category.getIcon()
-                ))
+                .map(categoryMapper::convert)
                 .toList();
     }
 }

@@ -1,19 +1,16 @@
 package by.skyperdyay.engine.core.middleware.service.impl;
 
 import by.skyperdyay.engine.core.domain.model.Category;
-import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Transaction;
 import by.skyperdyay.engine.core.domain.model.Wallet;
 import by.skyperdyay.engine.core.domain.service.CategoryDomainService;
 import by.skyperdyay.engine.core.domain.service.TransactionDomainService;
 import by.skyperdyay.engine.core.domain.service.WalletDomainService;
+import by.skyperdyay.engine.core.middleware.mapper.TransactionMapper;
 import by.skyperdyay.engine.core.middleware.model.request.ExpenseTransactionRequest;
 import by.skyperdyay.engine.core.middleware.model.request.IncomeTransactionRequest;
 import by.skyperdyay.engine.core.middleware.model.request.PeriodRequest;
-import by.skyperdyay.engine.core.middleware.model.response.CategoryResponse;
-import by.skyperdyay.engine.core.middleware.model.response.CurrencyResponse;
 import by.skyperdyay.engine.core.middleware.model.response.TransactionInfoResponse;
-import by.skyperdyay.engine.core.middleware.model.response.WalletInfoResponse;
 import by.skyperdyay.engine.core.middleware.service.TransactionEdgeService;
 import by.skyperdyay.security.api.CurrentUserApiService;
 import jakarta.transaction.Transactional;
@@ -28,15 +25,18 @@ public class TransactionFacade implements TransactionEdgeService {
     private final CategoryDomainService categoryDomainService;
     private final WalletDomainService walletDomainService;
     private final TransactionDomainService transactionDomainService;
+    private final TransactionMapper transactionMapper;
 
     public TransactionFacade(CurrentUserApiService currentUserApiService,
                              CategoryDomainService categoryDomainService,
                              WalletDomainService walletDomainService,
-                             TransactionDomainService transactionDomainService) {
+                             TransactionDomainService transactionDomainService,
+                             TransactionMapper transactionMapper) {
         this.currentUserApiService = currentUserApiService;
         this.categoryDomainService = categoryDomainService;
         this.walletDomainService = walletDomainService;
         this.transactionDomainService = transactionDomainService;
+        this.transactionMapper = transactionMapper;
     }
 
     @Override
@@ -87,30 +87,8 @@ public class TransactionFacade implements TransactionEdgeService {
         List<Transaction> transactions = transactionDomainService
                 .extractOwnerTransactionsByPeriod(owner, request.startPeriod(), request.endPeriod());
 
-        return transactions.stream().map(transaction -> {
-                    Wallet wallet = transaction.getWallet();
-                    Currency currency = wallet.getCurrency();
-                    Category category = transaction.getCategory();
-
-                    CurrencyResponse currencyResponse = new CurrencyResponse(
-                            currency.getCode(), currency.getName(), currency.getSymbol()
-                    );
-                    WalletInfoResponse walletInfoResponse = new WalletInfoResponse(
-                            wallet.getId(), wallet.getName(), wallet.getBalance(), currencyResponse
-                    );
-                    CategoryResponse categoryResponse = new CategoryResponse(
-                            category.getId(), category.getName(), category.getIcon(), category.getType().name()
-                    );
-
-                    return new TransactionInfoResponse(
-                            transaction.getId(),
-                            transaction.getAmount(),
-                            transaction.getTransactionDate(),
-                            transaction.getNotes(),
-                            walletInfoResponse,
-                            categoryResponse
-                    );
-                })
+        return transactions.stream()
+                .map(transactionMapper::convert)
                 .toList();
     }
 }
