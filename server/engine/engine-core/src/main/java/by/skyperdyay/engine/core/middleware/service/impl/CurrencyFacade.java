@@ -1,6 +1,7 @@
 package by.skyperdyay.engine.core.middleware.service.impl;
 
 import by.skyperdyay.engine.core.domain.service.CurrencyDomainService;
+import by.skyperdyay.engine.core.middleware.mapper.CurrencyMapper;
 import by.skyperdyay.engine.core.middleware.model.response.CurrencyResponse;
 import by.skyperdyay.engine.core.middleware.service.CurrencyEdgeService;
 import jakarta.transaction.Transactional;
@@ -12,20 +13,19 @@ import org.springframework.stereotype.Service;
 public class CurrencyFacade implements CurrencyEdgeService {
 
     private final CurrencyDomainService currencyDomainService;
+    private final CurrencyMapper currencyMapper;
 
-    public CurrencyFacade(CurrencyDomainService currencyDomainService) {
+    public CurrencyFacade(CurrencyDomainService currencyDomainService,
+                          CurrencyMapper currencyMapper) {
         this.currencyDomainService = currencyDomainService;
+        this.currencyMapper = currencyMapper;
     }
 
     @Override
     public List<CurrencyResponse> getAvailableCurrencies() {
         return currencyDomainService.fetchAllCurrencies()
                 .stream()
-                .map(entity -> new CurrencyResponse(
-                        entity.getCode(),
-                        entity.getName(),
-                        entity.getSymbol()
-                ))
+                .map(currencyMapper::convert)
                 .toList();
     }
 }

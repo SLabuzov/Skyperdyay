@@ -4,8 +4,8 @@ import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Wallet;
 import by.skyperdyay.engine.core.domain.service.CurrencyDomainService;
 import by.skyperdyay.engine.core.domain.service.WalletDomainService;
+import by.skyperdyay.engine.core.middleware.mapper.WalletMapper;
 import by.skyperdyay.engine.core.middleware.model.request.RegisterWalletRequest;
-import by.skyperdyay.engine.core.middleware.model.response.CurrencyResponse;
 import by.skyperdyay.engine.core.middleware.model.response.WalletInfoResponse;
 import by.skyperdyay.engine.core.middleware.service.WalletEdgeService;
 import by.skyperdyay.security.api.CurrentUserApiService;
@@ -20,13 +20,16 @@ public class WalletFacade implements WalletEdgeService {
     private final CurrentUserApiService currentUserApiService;
     private final WalletDomainService walletDomainService;
     private final CurrencyDomainService currencyDomainService;
+    private final WalletMapper walletMapper;
 
     public WalletFacade(CurrentUserApiService currentUserApiService,
                         WalletDomainService walletDomainService,
-                        CurrencyDomainService currencyDomainService) {
+                        CurrencyDomainService currencyDomainService,
+                        WalletMapper walletMapper) {
         this.currentUserApiService = currentUserApiService;
         this.walletDomainService = walletDomainService;
         this.currencyDomainService = currencyDomainService;
+        this.walletMapper = walletMapper;
     }
 
     @Override
@@ -52,19 +55,7 @@ public class WalletFacade implements WalletEdgeService {
 
         return walletDomainService.fetchAllUserWallets(owner)
                 .stream()
-                .map(entity -> {
-                    Currency currency = entity.getCurrency();
-                    CurrencyResponse currencyResponse = new CurrencyResponse(
-                            currency.getCode(), currency.getName(), currency.getSymbol()
-                    );
-
-                    return new WalletInfoResponse(
-                            entity.getId(),
-                            entity.getName(),
-                            entity.getBalance(),
-                            currencyResponse
-                    );
-                })
+                .map(walletMapper::convert)
                 .toList();
     }
 }
