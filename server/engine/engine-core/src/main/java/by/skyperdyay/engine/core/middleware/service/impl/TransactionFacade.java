@@ -94,7 +94,7 @@ public class TransactionFacade implements TransactionEdgeService {
 
                     CurrencyResponse currencyResponse = new CurrencyResponse(currency.getCode(), currency.getName(), currency.getSymbol());
                     WalletInfoResponse walletInfoResponse = new WalletInfoResponse(wallet.getId(), wallet.getName(), wallet.getBalance(), currencyResponse);
-                    CategoryResponse categoryResponse = new CategoryResponse(category.getId(), category.getName(), category.getIcon(), category.getType().name());
+                    CategoryResponse categoryResponse = new CategoryResponse(category.getId(), category.getName(), category.getType().name(), category.getIcon());
 
                     return new TransactionInfoResponse(
                             transaction.getId(),
