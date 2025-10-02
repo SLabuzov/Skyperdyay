@@ -4,6 +4,44 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+
+  --color-primary: var(--primary);
+  --color-primary-weak: var(--primary-weak);
+  --color-strong: var(--strong);
+  --color-weak: var(--weak);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-information: var(--information);
+
+  --color-icon-neutral: var(--icon-neutral);
+  --color-icon-error: var(--icon-error);
+  --color-icon-warning: var(--icon-warning);
+  --color-icon-success: var(--icon-success);
+  --color-icon-information: var(--icon-information);
+
+  --color-stroke-weak: var(--stroke-weak);
+  --color-stroke-error-strong: var(--stroke-error-strong);
+  --color-stroke-error-weak: var(--stroke-error-weak);
+  --color-stroke-warning-strong: var(--stroke-warning-strong);
+  --color-stroke-warning-weak: var(--stroke-warning-weak);
+  --color-stroke-success-strong: var(--stroke-success-strong);
+  --color-stroke-success-weak: var(--stroke-success-weak);
+  --color-stroke-information-strong: var(--stroke-information-strong);
+  --color-stroke-information-weak: var(--stroke-information-weak);
+
+  --color-fill-strong: var(--fill-strong);
+  --color-fill-weak: var(--fill-weak);
+  --color-fill-weaker: var(--fill-weaker);
+  --color-fill-error-strong: var(--fill-error-strong);
+  --color-fill-error-weak: var(--fill-error-weak);
+  --color-fill-warning-strong: var(--fill-warning-strong);
+  --color-fill-warning-weak: var(--fill-warning-weak);
+  --color-fill-success-strong: var(--fill-success-strong);
+  --color-fill-success-weak: var(--fill-success-weak);
+  --color-fill-information-strong: var(--fill-information-strong);
+  --color-fill-information-weak: var(--fill-information-weak);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -32,7 +70,6 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -44,6 +81,46 @@
 }
 
 :root {
+
+
+  --primary: #1e4841;
+  --primary-weak: #ecf4e9;
+  --strong: #181F3B;
+  --weak: #555E79;
+  --error: #c73a3a;
+  --warning: #8f6c1a;
+  --success: #067a57;
+  --information: #1a74a8;
+
+  --icon-neutral: #8c92af;
+  --icon-error: #d26161;
+  --icon-warning: #a58948;
+  --icon-success: #359477; /*#389579;*/
+  --icon-information: #4890b9;
+
+  --stroke-weak: #E6E7F0;
+  --stroke-error-strong: #d26161;
+  --stroke-error-weak: #C73A3A24; /*#f7e3e3;*/
+  --stroke-warning-strong: #a58948;
+  --stroke-warning-weak: #8F6C1A33; /*#e9e2d1;*/
+  --stroke-success-strong: #389579;
+  --stroke-success-weak: #067A5733 /*#cde4dd*/;
+  --stroke-information-strong: #4890b9;
+  --stroke-information-weak: #d1e3ee;
+
+  --fill-strong: #1a1f3c;
+  --fill-weak: #f5f6fa;
+  --fill-weaker: #fafafd;
+  --fill-error-strong: #c73a3a;
+  --fill-error-weak: #FF4A4A0D; /*#fff6f6;*/
+  --fill-warning-strong: #8f6c1a;
+  --fill-warning-weak: #FFC02E0D; /*#fffcf5;*/
+  --fill-success-strong: #067a57;
+  --fill-success-weak: #F3FCF9 /*#f3fcfa*/;
+  --fill-information-strong: #1a74a8;
+  --fill-information-weak: #f4fbff;
+
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -51,7 +128,6 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #1e4841;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
