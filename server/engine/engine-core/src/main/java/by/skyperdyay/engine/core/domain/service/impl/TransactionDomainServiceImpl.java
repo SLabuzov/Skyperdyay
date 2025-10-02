@@ -23,6 +23,6 @@ public class TransactionDomainServiceImpl implements TransactionDomainService {
 
     @Override
     public List<Transaction> extractOwnerTransactionsByPeriod(String owner, LocalDate startPeriod, LocalDate endPeriod) {
-        return transactionRepository.findAllByOwnerAndTransactionDateBetween(owner, startPeriod, endPeriod);
+        return transactionRepository.findAllByOwnerAndTransactionDateBetweenOrderByTransactionDateDesc(owner, startPeriod, endPeriod);
     }
 }

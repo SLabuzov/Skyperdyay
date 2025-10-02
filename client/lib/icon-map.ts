@@ -43,7 +43,7 @@ import {
   Beer,
   Milk,
   Fish,
-  BanknoteArrowDown, BanknoteArrowUp
+  BanknoteArrowDown, BanknoteArrowUp, HeartPulse, Sprout, Repeat, Popcorn
 } from 'lucide-react';
 
 
@@ -73,11 +73,15 @@ export const iconMap = {
   PlayCircle,
   Music,
   Heart,
+  HeartPulse,
+  Sprout,
   PlusCircle,
   BookOpen,
   Shirt,
   Film,
   Gamepad2,
+  Popcorn,
+  Repeat,
   Plane,
   MapPin,
   Hammer,

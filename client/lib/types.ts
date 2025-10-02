@@ -59,3 +59,8 @@ export interface TransactionInfo {
   wallet: WalletInfo
   category: CategoryInfo
 }
+
+export interface TransactionHistoryParams {
+  startPeriod: string
+  endPeriod: string
+}

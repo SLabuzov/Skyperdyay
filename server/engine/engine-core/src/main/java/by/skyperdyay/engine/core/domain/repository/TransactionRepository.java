@@ -7,5 +7,5 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
-    List<Transaction> findAllByOwnerAndTransactionDateBetween(String owner, LocalDate startDate, LocalDate endDate);
+    List<Transaction> findAllByOwnerAndTransactionDateBetweenOrderByTransactionDateDesc(String owner, LocalDate startDate, LocalDate endDate);
 }
