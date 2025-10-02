@@ -1,5 +1,5 @@
-import { CategoryInfo, CreateCategoryDto } from '@/lib/types';
-import { apiClient } from '@/services/api-client';
+import {CategoryInfo, CreateCategoryDto} from '@/lib/types';
+import {apiClient} from '@/services/api-client';
 
 class CategoryApiService {
   private readonly baseUrl: string = process.env.BACKEND_APP_API_ENDPOINT! + '/categories';
