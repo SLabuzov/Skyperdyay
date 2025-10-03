@@ -34,3 +34,19 @@ export interface CategoryInfo {
   categoryType: CategoryType
   categoryIcon: IconName
 }
+
+export interface CreateExpenseTransactionDto {
+  walletId: UUID
+  expenseCategoryId: UUID
+  amount: number
+  transactionDate: string
+  notes: string | null | undefined
+}
+
+export interface CreateIncomeTransactionDto {
+  walletId: UUID
+  incomeCategoryId: UUID
+  amount: number
+  transactionDate: string
+  notes: string | null | undefined
+}
