@@ -50,3 +50,20 @@ export interface CreateIncomeTransactionDto {
   transactionDate: string
   notes: string | null | undefined
 }
+
+export interface TransactionInfo {
+  transactionId: UUID
+  amount: number
+  transactionDate: string
+  notes: string | null | undefined
+  wallet: WalletInfo
+  category: CategoryInfo
+}
+
+export type HistoryPeriod = "THIS_MONTH" | "PREV_MONTH" | "THIS_YEAR";
+export type NullableHistoryPeriod = HistoryPeriod | null;
+
+export interface TransactionHistoryParams {
+  startPeriod: string
+  endPeriod: string
+}
