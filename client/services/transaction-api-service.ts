@@ -16,7 +16,7 @@ class TransactionApiService {
     const url = new URL(this.baseUrl + '/history');
     url.searchParams.append('startDate', String(startDate));
     url.searchParams.append('endDate', String(endDate));
-
+    console.log(url.toString())
     return apiClient.get<TransactionInfo[]>(url.toString());
   }
 }

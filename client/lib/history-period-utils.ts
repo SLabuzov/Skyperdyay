@@ -29,7 +29,7 @@ function constructCurrentYear(currentDate: Date): TransactionHistoryParams {
   const year = currentDate.getFullYear();
 
   return {
-    startPeriod: dateFormat(new Date(year, 1, 1)),
+    startPeriod: dateFormat(new Date(year, 0, 1)),
     endPeriod: dateFormat(new Date(year + 1, 0, 0))
   } satisfies TransactionHistoryParams;
 }

@@ -67,3 +67,16 @@ export interface TransactionHistoryParams {
   startPeriod: string
   endPeriod: string
 }
+
+
+export interface CashFlowInfo {
+  month: string
+  currencyCode: string
+  expenseAmount: number
+  incomeAmount: number
+}
+
+export interface FinanceScoreResult {
+  financeQuality: "Отличное" | "Хорошее" | "Удовлетворительное"
+  savingPercent: number
+}
