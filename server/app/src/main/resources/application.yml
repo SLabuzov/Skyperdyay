@@ -18,3 +18,5 @@ spring:
         jwt:
           jwk-set-uri: ${JWK_SET_URI}
           issuer-uri: ${ISSUER_URI}
+  liquibase:
+    enabled: false
