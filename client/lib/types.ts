@@ -67,3 +67,27 @@ export interface TransactionHistoryParams {
   startPeriod: string
   endPeriod: string
 }
+
+export interface BalancePeriodMetrics {
+  periodInterval: number
+  incomeTotal: number
+  expenseTotal: number
+  netIncomeTotal: number
+  incomeDiff: number
+  expenseDiff: number
+  netIncomeDiff: number
+  incomePercentage: number
+  expensePercentage: number
+  netIncomePercentage: number
+}
+
+export interface FinancialReport {
+  isMainCurrency: boolean
+  currencyCode: string
+  availableBalance: number
+  balanceMetrics: BalancePeriodMetrics
+}
+
+export interface AnalyticsSummary {
+  financialReports: FinancialReport[]
+}
