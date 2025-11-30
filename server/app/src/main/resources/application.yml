@@ -1,22 +1,39 @@
 spring:
   application:
+    admin:
+      enabled: false
     name: server
+  cache:
+    type: none
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      poolName: Hikari
+      maximum-pool-size: 4
+      connection-timeout: 30000
+  jmx:
+    enabled: false
   jpa:
     open-in-view: false
-    show-sql: true
     properties:
       hibernate.jdbc.time_zone: UTC
-      hibernate.format_sql: true
+  liquibase:
+    enabled: false
+  profiles:
+    active: dev
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: ${JWK_SET_URI}
           issuer-uri: ${ISSUER_URI}
-  liquibase:
-    enabled: false
+  servlet:
+    multipart:
+      enabled: false
+  sql:
+    init:
+      enabled: false

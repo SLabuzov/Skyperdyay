@@ -1,5 +1,6 @@
 package by.skyperdyay.engine.core.domain.service.impl;
 
+import by.skyperdyay.engine.core.api.WalletApiService;
 import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Wallet;
 import by.skyperdyay.engine.core.domain.repository.WalletRepository;
@@ -10,7 +11,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WalletDomainServiceImpl implements WalletDomainService {
+public class WalletDomainServiceImpl implements WalletDomainService, WalletApiService {
 
     private final WalletRepository walletRepository;
 
@@ -55,5 +56,10 @@ public class WalletDomainServiceImpl implements WalletDomainService {
         wallet.setBalance(updatedBalance);
 
         walletRepository.save(wallet);
+    }
+
+    @Override
+    public int countOwnerWallets(String owner) {
+        return walletRepository.countByOwner(owner);
     }
 }

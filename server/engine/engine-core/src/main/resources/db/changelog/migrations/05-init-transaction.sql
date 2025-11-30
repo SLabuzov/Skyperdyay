@@ -18,3 +18,11 @@ CREATE TABLE moneybox.transactions
         FOREIGN KEY ( category_id ) REFERENCES moneybox.categories ( id )
 );
 --rollback DROP TABLE moneybox.transactions;
+
+--changeset SergeyLabuzov:add-wallets-index-idx_transactions_wallets__fk
+CREATE INDEX IF NOT EXISTS idx_transactions_wallets__fk ON moneybox.transactions ( wallet_id );
+--rollback DROP INDEX IF EXISTS idx_transactions_wallets__fk;
+
+--changeset SergeyLabuzov:add-wallets-index-idx_transactions_categories__fk
+CREATE INDEX IF NOT EXISTS idx_transactions_categories__fk ON moneybox.transactions ( category_id );
+--rollback DROP INDEX IF EXISTS idx_transactions_categories__fk;

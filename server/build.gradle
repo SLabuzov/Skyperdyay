@@ -7,6 +7,13 @@ plugins {
 
 ext['testcontainers.version'] = "${testcontainersVersion}"
 
+// Функция для получения env переменных либо system переменных, при отсутствии env
+ext.getEnvVar = { String varName ->
+	return env.allVariables()
+			.find { key, value -> (varName == key) }
+			.getValue()
+}
+
 subprojects {
 	group = 'by.skuperdyay'
 	version = "${appVersion}"
@@ -14,9 +21,14 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'io.spring.dependency-management'
 
+	// Передаем конкретные переменные
+	project.ext.set("POSTGRES_DB_URL", getEnvVar("POSTGRES_DB_URL"))
+	project.ext.set("POSTGRES_USER", getEnvVar("POSTGRES_USER"))
+	project.ext.set("POSTGRES_PASSWORD", getEnvVar("POSTGRES_PASSWORD"))
+
 	java {
 		toolchain {
-			languageVersion = JavaLanguageVersion.of(17)
+			languageVersion = JavaLanguageVersion.of(21)
 		}
 	}
 
