@@ -5,6 +5,7 @@ dependencies {
     implementation project(':security:security-core')
     implementation project(':engine:engine-core')
     implementation project(':engine:engine-analytics')
+    implementation project(':common:common-exception-handling')
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'

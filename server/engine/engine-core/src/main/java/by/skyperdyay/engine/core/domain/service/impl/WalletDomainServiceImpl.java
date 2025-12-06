@@ -1,5 +1,6 @@
 package by.skyperdyay.engine.core.domain.service.impl;
 
+import by.skyperdyay.common.exception.api.ResourceConflictException;
 import by.skyperdyay.engine.core.api.WalletApiService;
 import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.model.Wallet;
@@ -22,7 +23,10 @@ public class WalletDomainServiceImpl implements WalletDomainService, WalletApiSe
     @Override
     public void ensureUserWalletUniqueness(String owner, Currency currency) {
         if (walletRepository.existsByOwnerAndCurrency(owner, currency)) {
-            throw new RuntimeException();
+            throw new ResourceConflictException(
+                    String.format("Дубликат кошелька с валютой %s у пользователя %s", currency.getCode(), owner),
+                    String.format("Попытка создания второго кошелька с валютой %s. На каждую валюту допустимо наличие одного кошелка", currency.getCode())
+            );
         }
     }
 
