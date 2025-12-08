@@ -25,9 +25,9 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc {
                     driver = 'org.postgresql.Driver'
-                    url = env.POSTGRES_DB_URL.value
-                    user = env.POSTGRES_USER.value
-                    password = env.POSTGRES_PASSWORD.value
+                    url = project.ext.POSTGRES_DB_URL
+                    user = project.ext.POSTGRES_USER
+                    password = project.ext.POSTGRES_PASSWORD
                 }
                 generator {
                     name = 'org.jooq.codegen.DefaultGenerator'
