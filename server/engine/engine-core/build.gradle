@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':security:security-api')
+    implementation project(':engine:engine-core-api')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -23,9 +24,9 @@ liquibase {
     activities {
         main {
             changelogFile "db/changelog/db.changelog-master.yaml"
-            url env.POSTGRES_DB_URL.value
-            username env.POSTGRES_USER.value
-            password env.POSTGRES_PASSWORD.value
+            url project.ext.POSTGRES_DB_URL
+            username project.ext.POSTGRES_USER
+            password project.ext.POSTGRES_PASSWORD
         }
     }
 }

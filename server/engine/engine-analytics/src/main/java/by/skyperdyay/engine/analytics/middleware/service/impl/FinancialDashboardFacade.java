@@ -6,6 +6,7 @@ import by.skyperdyay.engine.analytics.middleware.model.response.BalancePeriodMet
 import by.skyperdyay.engine.analytics.middleware.model.response.CurrencyFinancialSummary;
 import by.skyperdyay.engine.analytics.middleware.model.response.FinancialDashboard;
 import by.skyperdyay.engine.analytics.middleware.service.FinancialDashboardEdgeService;
+import by.skyperdyay.engine.analytics.middleware.validator.FinancialDashboardValidator;
 import by.skyperdyay.security.api.CurrentUserApiService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,17 +23,22 @@ public class FinancialDashboardFacade implements FinancialDashboardEdgeService {
 
     private final BalanceDomainService balanceDomainService;
     private final CurrentUserApiService currentUserApiService;
+    private final FinancialDashboardValidator financialDashboardValidator;
 
     public FinancialDashboardFacade(BalanceDomainService balanceDomainService,
-                                    CurrentUserApiService currentUserApiService) {
+                                    CurrentUserApiService currentUserApiService,
+                                    FinancialDashboardValidator financialDashboardValidator) {
         this.balanceDomainService = balanceDomainService;
         this.currentUserApiService = currentUserApiService;
+        this.financialDashboardValidator = financialDashboardValidator;
     }
 
     @Override
     public FinancialDashboard assembleFinancialOverview() {
         LocalDate reportDate = LocalDate.now();
         String owner = currentUserApiService.currentUserAccount().userId();
+
+        financialDashboardValidator.validateBeforeExecution(owner);
 
         List<BalanceTrend> balanceTrends = balanceDomainService.generateTrendingReport(owner, reportDate, BALANCE_TREND_INTERVAL);
 
