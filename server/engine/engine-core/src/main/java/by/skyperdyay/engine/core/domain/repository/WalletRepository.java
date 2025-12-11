@@ -13,4 +13,6 @@ public interface WalletRepository extends JpaRepository<Wallet, UUID> {
     List<Wallet> findAllByOwner(String owner);
 
     Optional<Wallet> findByIdAndOwner(UUID id, String owner);
+
+    int countByOwner(String owner);
 }
