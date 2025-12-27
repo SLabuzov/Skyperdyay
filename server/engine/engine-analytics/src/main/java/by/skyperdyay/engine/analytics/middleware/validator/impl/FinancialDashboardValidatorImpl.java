@@ -1,5 +1,6 @@
 package by.skyperdyay.engine.analytics.middleware.validator.impl;
 
+import by.skyperdyay.common.exception.api.ResourceNotFoundException;
 import by.skyperdyay.engine.analytics.middleware.validator.FinancialDashboardValidator;
 import by.skyperdyay.engine.core.api.WalletApiService;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,9 @@ public class FinancialDashboardValidatorImpl implements FinancialDashboardValida
     @Override
     public void validateBeforeExecution(String owner) {
         if (walletApiService.countOwnerWallets(owner) == 0) {
-            throw new RuntimeException(
-                    String.format("Отсутствуют кошельки у пользователя с ID = %s", owner)
+            throw new ResourceNotFoundException(
+                    String.format("Отсутствуют кошельки у пользователя с ID = %s", owner),
+                    "Для отображения аналитики необходимо создать кошелёк"
             );
         }
     }
