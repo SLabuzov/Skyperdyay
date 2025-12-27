@@ -3,6 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
 
     implementation project(':security:security-core')
+    implementation project(':common:common-exception-handling')
     implementation project(':engine:engine-core')
     implementation project(':engine:engine-analytics')
 
