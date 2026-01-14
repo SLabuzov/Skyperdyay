@@ -91,3 +91,12 @@ export interface FinancialReport {
 export interface AnalyticsSummary {
   financialReports: FinancialReport[]
 }
+
+export interface CreateTransferDto {
+  sourceWalletId: UUID
+  targetWalletId: UUID
+  sourceAmount: number
+  targetAmount: number
+  transferDate: string
+  notes: string | null | undefined
+}

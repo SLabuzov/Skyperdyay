@@ -30,6 +30,10 @@ export default async function TransactionsPage({ searchParams }: PageParams) {
                 className="py-2 px-4 bg-fill-error-weak rounded-sm border-1 border-stroke-error-weak">
             <p className="text-sm font-semibold text-error">Записать расход</p>
           </Link>
+          <Link href={ "/transactions/transfer" }
+                className="py-2 px-4 bg-fill-information-weak rounded-sm border-1 border-stroke-information-weak">
+            <p className="text-sm font-semibold text-information">Перевод</p>
+          </Link>
         </div>
       </div>
       <TransactionTable transactions={ history } historyPeriod={ historyPeriod }/>
