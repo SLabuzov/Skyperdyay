@@ -14,3 +14,6 @@ databaseChangeLog:
   - include:
       file: migrations/05-init-transaction.sql
       relativeToChangelogFile: true
+  - include:
+      file: migrations/06-init-transfers.sql
+      relativeToChangelogFile: true
