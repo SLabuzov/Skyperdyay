@@ -18,3 +18,9 @@ VALUES ('CNY', 'Китайский Юань', '¥'),
        ('EUR', 'Евро', '€'),
        ('GBP', 'Фунт Стерлинга', '£');
 --rollback TRUNCATE TABLE moneybox.dict_currencies;
+
+--changeset SergeyLabuzov:create-fill-table-dict_currencies-add-uah-kzt
+INSERT INTO moneybox.dict_currencies (code, name, symbol)
+VALUES ('UAH', 'Украинская гривна', '₴'),
+       ('KZT', 'Казахстанский тенге', '₸');
+--rollback DELETE FROM moneybox.dict_currencies WHERE code in ('UAH', 'KZT');

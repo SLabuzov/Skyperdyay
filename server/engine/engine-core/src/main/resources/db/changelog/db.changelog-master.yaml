@@ -17,3 +17,15 @@ databaseChangeLog:
   - include:
       file: migrations/06-init-transfers.sql
       relativeToChangelogFile: true
+  - include:
+      file: migrations/07-init-countries.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/08-init-timezones.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/09-init-profiles.sql
+      relativeToChangelogFile: true
+  - include:
+      file: migrations/10-init-onboardings.sql
+      relativeToChangelogFile: true
