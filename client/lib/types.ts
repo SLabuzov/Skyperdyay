@@ -7,6 +7,32 @@ export interface Currency {
   symbol: string
 }
 
+export interface Country {
+  code: string
+  name: string
+  defaultCurrency: Currency
+  defaultTimezone: Timezone
+}
+
+export interface Timezone {
+  code: string
+  name: string
+}
+
+export interface SubmitOnboardingDto {
+  profile: CreateProfileDto
+  incomeCategories: CreateCategoryDto[]
+  expenseCategories: CreateCategoryDto[]
+  wallet: CreateWalletDto
+}
+
+export interface CreateProfileDto {
+  country: string
+  timezone: string
+  mainCurrencyCode: string
+  acceptedTerms: boolean
+}
+
 export interface CreateWalletDto {
   walletName: string
   currencyCode: string
@@ -99,4 +125,17 @@ export interface CreateTransferDto {
   targetAmount: number
   transferDate: string
   notes: string | null | undefined
+}
+
+export interface OnboardingStatusInfo {
+  status: 'COMPLETED' | 'UNCOMPLETED'
+}
+
+export interface OnboardingFormData {
+  country: string
+  currency: string
+  timezone: string
+  incomeCategory: string
+  expenseCategory: string
+  acceptedTerms: false
 }

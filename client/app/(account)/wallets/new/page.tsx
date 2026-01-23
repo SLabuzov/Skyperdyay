@@ -1,9 +1,9 @@
 import React from "react";
 import NewWalletForm from '@/components/wallet/new-wallet-form';
-import { currencyApiService } from '@/services/currency-api-service';
+import { dictionaryApiService } from '@/services/dictionary-api-service';
 
 export default async function NewWalletPage() {
-  const currencies = await currencyApiService.getCurrencies();
+  const currencies = await dictionaryApiService.getCurrencies();
 
   return (
     <div className="flex flex-col flex-1 gap-4 px-8">
