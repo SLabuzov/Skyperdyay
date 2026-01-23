@@ -43,6 +43,11 @@ public class CategoryFacade implements CategoryEdgeService {
     }
 
     @Override
+    public void defineCategories(List<DefineCategoryRequest> request) {
+        request.forEach(this::defineCategory);
+    }
+
+    @Override
     public List<CategoryResponse> availableUserCategories() {
         String owner = currentUserApiService.currentUserAccount().userId();
 

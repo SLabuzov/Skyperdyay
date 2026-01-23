@@ -63,6 +63,11 @@ public class WalletDomainServiceImpl implements WalletDomainService, WalletApiSe
     }
 
     @Override
+    public boolean existsUserWallets(String owner) {
+        return countOwnerWallets(owner) > 0;
+    }
+
+    @Override
     public int countOwnerWallets(String owner) {
         return walletRepository.countByOwner(owner);
     }

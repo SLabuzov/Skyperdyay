@@ -18,4 +18,6 @@ public interface WalletDomainService {
     void topUpWallet(Wallet wallet, BigDecimal amount);
 
     void withdraw(Wallet wallet, BigDecimal amount);
+
+    boolean existsUserWallets(String owner);
 }
