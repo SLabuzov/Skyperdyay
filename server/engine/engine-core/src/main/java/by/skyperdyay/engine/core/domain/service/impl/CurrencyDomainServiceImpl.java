@@ -1,5 +1,6 @@
 package by.skyperdyay.engine.core.domain.service.impl;
 
+import by.skyperdyay.common.exception.api.ResourceNotFoundException;
 import by.skyperdyay.engine.core.domain.model.Currency;
 import by.skyperdyay.engine.core.domain.repository.CurrencyRepository;
 import by.skyperdyay.engine.core.domain.service.CurrencyDomainService;
@@ -24,6 +25,9 @@ public class CurrencyDomainServiceImpl implements CurrencyDomainService {
     public Currency fetchCurrency(String currencyCode) {
         return currencyRepository
                 .findById(currencyCode)
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Валюта не найдена",
+                        String.format("Запрашиваемая валюта %s не найдена в системе", currencyCode)
+                ));
     }
 }

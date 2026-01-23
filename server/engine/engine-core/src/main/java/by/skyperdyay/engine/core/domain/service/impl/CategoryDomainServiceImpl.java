@@ -40,4 +40,14 @@ public class CategoryDomainServiceImpl implements CategoryDomainService {
                 .findByIdAndOwnerAndType(id, owner, CategoryType.EXPENSE)
                 .orElseThrow();
     }
+
+    @Override
+    public boolean existsIncomeUserCategory(String owner) {
+        return categoryRepository.existsByOwnerAndType(owner, CategoryType.INCOME);
+    }
+
+    @Override
+    public boolean existsExpenseUserCategory(String owner) {
+        return categoryRepository.existsByOwnerAndType(owner, CategoryType.EXPENSE);
+    }
 }

@@ -11,4 +11,6 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     List<Category> findAllByOwner(String owner);
 
     Optional<Category> findByIdAndOwnerAndType(UUID id, String owner, CategoryType categoryType);
+
+    boolean existsByOwnerAndType(String owner, CategoryType categoryType);
 }

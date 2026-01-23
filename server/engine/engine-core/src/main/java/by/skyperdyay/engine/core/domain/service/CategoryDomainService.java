@@ -12,4 +12,8 @@ public interface CategoryDomainService {
     Category fetchIncomeUserCategory(UUID id, String owner);
 
     Category fetchExpenseUserCategory(UUID id, String owner);
+
+    boolean existsIncomeUserCategory(String owner);
+
+    boolean existsExpenseUserCategory(String owner);
 }
