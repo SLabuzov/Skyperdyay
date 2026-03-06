@@ -1,13 +1,24 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WalletInfoCard from "@/components/wallet/wallet-info-card";
 import { walletApiService } from "@/services/wallet-api-service";
+import WalletsSkeleton from "@/components/wallet/wallets-skeleton";
 
-export default async function WalletsPage() {
+async function WalletsDataFetcher() {
   const wallets = await walletApiService.getWallets();
 
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      { wallets.map(wallet => (
+        <WalletInfoCard key={ wallet.walletId } walletInfo={ wallet }/>
+      )) }
+    </div>
+  );
+}
+
+export default async function WalletsPage() {
   return (
     <div className="flex flex-col flex-1 gap-4 px-8">
       <div className="flex items-center justify-between h-10">
@@ -19,11 +30,9 @@ export default async function WalletsPage() {
           </Link>
         </Button>
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        { wallets.map(wallet => (
-          <WalletInfoCard key={ wallet.walletId } walletInfo={ wallet }/>
-        )) }
-      </div>
+      <Suspense fallback={ <WalletsSkeleton/> }>
+        <WalletsDataFetcher/>
+      </Suspense>
     </div>
   );
 }
