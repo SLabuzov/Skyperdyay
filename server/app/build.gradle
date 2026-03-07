@@ -6,6 +6,9 @@ dependencies {
     implementation project(':common:common-exception-handling')
     implementation project(':engine:engine-core')
     implementation project(':engine:engine-analytics')
+    implementation project(':currency-exchange-rates:currency-exchange-rates-scheduler')
+    implementation project(':currency-exchange-rates:byn-exchange-rates')
+    implementation project(':currency-exchange-rates:rub-exchange-rates')
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
