@@ -1,0 +1,4 @@
+dependencies {
+    // Depends on common data models
+    implementation project(':common:common-dm-api')
+}

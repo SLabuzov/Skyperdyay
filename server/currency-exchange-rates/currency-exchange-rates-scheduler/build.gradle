@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':currency-exchange-rates:currency-exchange-rates-api')
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.retry:spring-retry'
+}

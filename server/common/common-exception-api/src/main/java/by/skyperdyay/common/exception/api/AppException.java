@@ -2,6 +2,10 @@ package by.skyperdyay.common.exception.api;
 
 import lombok.Getter;
 
+/**
+ * Базовое исключение приложения.
+ * Содержит заголовок для отображения пользователю.
+ */
 @Getter
 public abstract class AppException extends RuntimeException {
 
