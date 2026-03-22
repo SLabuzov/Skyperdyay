@@ -1,8 +1,13 @@
 package by.skyperdyay.engine.analytics.middleware.service.impl;
 
 import by.skyperdyay.engine.analytics.domain.model.BalanceTrend;
+import by.skyperdyay.engine.analytics.domain.model.CategoryBreakdown;
+import by.skyperdyay.engine.analytics.domain.model.CategoryType;
 import by.skyperdyay.engine.analytics.domain.service.BalanceDomainService;
+import by.skyperdyay.engine.analytics.domain.service.CategoryDomainService;
 import by.skyperdyay.engine.analytics.middleware.model.response.BalancePeriodMetrics;
+import by.skyperdyay.engine.analytics.middleware.model.response.CategoryBreakdownItem;
+import by.skyperdyay.engine.analytics.middleware.model.response.CategoryBreakdownSummary;
 import by.skyperdyay.engine.analytics.middleware.model.response.CurrencyFinancialSummary;
 import by.skyperdyay.engine.analytics.middleware.model.response.FinancialDashboard;
 import by.skyperdyay.engine.analytics.middleware.service.FinancialDashboardEdgeService;
@@ -20,13 +25,16 @@ public class FinancialDashboardFacade implements FinancialDashboardEdgeService {
     private final int BALANCE_TREND_INTERVAL = 30;
 
     private final BalanceDomainService balanceDomainService;
+    private final CategoryDomainService categoryDomainService;
     private final CurrentUserApiService currentUserApiService;
     private final FinancialDashboardValidator financialDashboardValidator;
 
     public FinancialDashboardFacade(BalanceDomainService balanceDomainService,
+                                    CategoryDomainService categoryDomainService,
                                     CurrentUserApiService currentUserApiService,
                                     FinancialDashboardValidator financialDashboardValidator) {
         this.balanceDomainService = balanceDomainService;
+        this.categoryDomainService = categoryDomainService;
         this.currentUserApiService = currentUserApiService;
         this.financialDashboardValidator = financialDashboardValidator;
     }
@@ -39,13 +47,42 @@ public class FinancialDashboardFacade implements FinancialDashboardEdgeService {
         financialDashboardValidator.validateBeforeExecution(owner);
 
         List<BalanceTrend> balanceTrends = balanceDomainService.generateTrendingReport(owner, reportDate, BALANCE_TREND_INTERVAL);
+        List<CategoryBreakdown> categoryBreakdowns = categoryDomainService.generateCategoryBreakdownReport(owner, reportDate, BALANCE_TREND_INTERVAL);
+
+        CategoryBreakdownSummary categoryBreakdownSummary = mapToCategoryBreakdownSummary(categoryBreakdowns);
 
         List<CurrencyFinancialSummary> financialReports = balanceTrends
                 .stream()
                 .map(this::map)
                 .toList();
 
-        return new FinancialDashboard(financialReports);
+        return new FinancialDashboard(financialReports, categoryBreakdownSummary);
+    }
+
+    private CategoryBreakdownSummary mapToCategoryBreakdownSummary(List<CategoryBreakdown> categoryBreakdowns) {
+
+        String mainCurrencyCode = categoryBreakdowns.stream().findFirst().map(CategoryBreakdown::mainCurrencyCode).orElse(null);
+
+        List<CategoryBreakdownItem> incomeItems = categoryBreakdowns.stream()
+                .filter(it -> it.categoryType().equals(CategoryType.INCOME.name()))
+                .map(it -> new CategoryBreakdownItem(it.categoryId(), it.categoryName(), it.totalAmount(), it.percent()))
+                .toList();
+
+        List<CategoryBreakdownItem> expenseItems = categoryBreakdowns.stream()
+                .filter(it -> it.categoryType().equals(CategoryType.EXPENSE.name()))
+                .map(it -> new CategoryBreakdownItem(it.categoryId(), it.categoryName(), it.totalAmount(), it.percent()))
+                .toList();
+
+        BigDecimal totalIncome = incomeItems.stream().map(CategoryBreakdownItem::totalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalExpense = expenseItems.stream().map(CategoryBreakdownItem::totalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return new CategoryBreakdownSummary(
+                mainCurrencyCode,
+                totalIncome,
+                totalExpense,
+                incomeItems,
+                expenseItems
+        );
     }
 
     private CurrencyFinancialSummary map(BalanceTrend trendItem) {

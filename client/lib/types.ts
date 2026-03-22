@@ -116,6 +116,7 @@ export interface FinancialReport {
 
 export interface AnalyticsSummary {
   financialReports: FinancialReport[]
+  categoryBreakdownSummary: CategoryBreakdownSummary
 }
 
 export interface CreateTransferDto {
@@ -131,11 +132,18 @@ export interface OnboardingStatusInfo {
   status: 'COMPLETED' | 'UNCOMPLETED'
 }
 
-export interface OnboardingFormData {
-  country: string
-  currency: string
-  timezone: string
-  incomeCategory: string
-  expenseCategory: string
-  acceptedTerms: false
+export interface CategoryBreakdownSummary {
+  mainCurrencyCode: string
+  totalIncomeAmount: number
+  totalExpenseAmount: number
+  incomeBreakdownSummary: CategoryBreakdownItem[]
+  expenseBreakdownSummary: CategoryBreakdownItem[]
 }
+
+export interface CategoryBreakdownItem {
+  categoryId: UUID
+  categoryName: string
+  totalAmount: number
+  percent: number
+}
+

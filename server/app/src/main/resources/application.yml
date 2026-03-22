@@ -25,12 +25,12 @@ exchange:
   rates:
     providers:
       nbrb-byn:
-        cron: "0 9 * * * *"
+        cron: "0 0 9 * * *"
         max-attempts: 5
         backoff-delay: 10000
         backoff-multiplier: 2.0
       cbr-rub:
-        cron: "0 9 * * * *"
+        cron: "0 0 9 * * *"
         max-attempts: 3
         backoff-delay: 5000
         backoff-multiplier: 1.0
