@@ -3,14 +3,12 @@ package by.skyperdyay.engine.analytics.domain.model;
 import java.math.BigDecimal;
 
 /**
- * Агрегированные метрики баланса и доходов/расходов за два последовательных периода
- * одинаковой длительности: базовый и текущий.
+ * Агрегированные метрики доходов/расходов за два последовательных периода
+ * одинаковой длительности: базовый и текущий. Все валютные суммы пересчитываются дополнительно в основную валюту пользователя (*Mcc).
  */
-public record BalanceTrend(
+public record PeriodMetrics(
         String currencyCode,
         String mainCurrencyCode,
-        BigDecimal totalBalance,
-        BigDecimal totalBalanceInMainCurrency,
         BigDecimal baselineTotalIncome,
         BigDecimal baselineTotalIncomeMcc,
         BigDecimal baselineTotalExpense,

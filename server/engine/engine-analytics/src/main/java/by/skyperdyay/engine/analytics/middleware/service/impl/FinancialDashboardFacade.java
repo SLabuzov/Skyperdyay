@@ -11,8 +11,6 @@ import by.skyperdyay.security.api.CurrentUserApiService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -42,20 +40,16 @@ public class FinancialDashboardFacade implements FinancialDashboardEdgeService {
 
         List<BalanceTrend> balanceTrends = balanceDomainService.generateTrendingReport(owner, reportDate, BALANCE_TREND_INTERVAL);
 
-        // На данный момент как заглушка. Находим главную валюту по кол-ву операций за весь период.
-        BalanceTrend mainCurrencyTrend = Collections
-                .max(balanceTrends, Comparator.comparing(BalanceTrend::countTotalTransactions));
-
         List<CurrencyFinancialSummary> financialReports = balanceTrends
                 .stream()
-                .map(trendItem -> map(trendItem, mainCurrencyTrend))
+                .map(this::map)
                 .toList();
 
         return new FinancialDashboard(financialReports);
     }
 
-    private CurrencyFinancialSummary map(BalanceTrend trendItem, BalanceTrend mainCurrencyTrend) {
-        boolean isMainCurrency = trendItem.equals(mainCurrencyTrend);
+    private CurrencyFinancialSummary map(BalanceTrend trendItem) {
+        boolean isMainCurrency = trendItem.currencyCode().equals(trendItem.mainCurrencyCode());
 
         // Чистый доход
         BigDecimal netIncomeBaseline = trendItem.baselineTotalIncome().subtract(trendItem.baselineTotalExpense());
@@ -87,7 +81,7 @@ public class FinancialDashboardFacade implements FinancialDashboardEdgeService {
         return new CurrencyFinancialSummary(
                 isMainCurrency,
                 trendItem.currencyCode(),
-                trendItem.currentBalance(),
+                trendItem.totalBalance(),
                 balancePeriodMetrics
         );
     }
